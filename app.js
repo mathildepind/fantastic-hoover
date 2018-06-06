@@ -1,29 +1,39 @@
 const fs = require("fs");
 
 fs.readFile('input.txt', function (err, data) {
-   if (err) {
-      return console.error(err);
-   }
-   const inputArray = data.toString().split("\n");
-   const instructions = createInstructionsObject(inputArray);
-   const navigatedSquares = navigateRoboHoover(instructions);
-   const finalPosition = navigatedSquares[navigatedSquares.length-1];
-   const cleanSquares = cleanUpDirtPatches(instructions, navigatedSquares);
-   console.log(finalPosition);
-   console.log(cleanSquares);
+    // reads data from input.txt file
+    if (err) {
+        return console.error(err);
+    }
+    const inputArray = data.toString().split("\n");
+    const instructions = createInstructionsObject(inputArray);
+    const navigatedSquares = navigateRoboHoover(instructions);
+    const finalPosition = navigatedSquares[navigatedSquares.length-1];
+    const cleanSquares = cleanUpDirtPatches(instructions, navigatedSquares);
+    console.log(finalPosition);
+    console.log(cleanSquares);
 });
 
 
-
 function createInstructionsObject(instructionsArray) {
+    // input = array of data read from input.txt file
+    // creates an object containing data from the input in accessible format
+    // keys are human readable names and values are processed data from array
+    // returns object
+
     const copyArr = [...instructionsArray];
+
     const roomDimensions = copyArr[0].split(' ');
+
     const initPosition = copyArr[1].split(' ');
+
     let dirtPatches = [];
     for (let i=2; i<copyArr.length-1; i++) {
         dirtPatches.push(copyArr[i]);
     }
+
     const drivingInstructions = copyArr[copyArr.length-1].split('');
+
     const instr = {
         roomDimensions,
         initPosition,
@@ -36,6 +46,10 @@ function createInstructionsObject(instructionsArray) {
 
 
 function navigateRoboHoover(instructionsObject) {
+    // input = object with instructions
+    // loops through drivingInstructions to navigate the robo hoover around the room
+    // returns an array of coordinates the robo hoover has visited
+
     const drivingInstructions = instructionsObject.drivingInstructions;
     const initPosition = instructionsObject.initPosition;
 
@@ -81,7 +95,12 @@ function navigateRoboHoover(instructionsObject) {
 
 
 
-function cleanUpDirtPatches(instructionsObject, visitedSquares) {  
+function cleanUpDirtPatches(instructionsObject, visitedSquares) {
+    // input = object with instructions
+    // compares the array of dirtPatches with the array of visitedSquares
+    // to determine whether there are matches
+    // returns a number
+
     const dirtPatches = instructionsObject.dirtPatches;
     let cleanSquares = 0;
     for (let item in dirtPatches) {
